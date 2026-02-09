@@ -42,6 +42,37 @@ router.post('/',
     }
 );
 
+
+// @route   POST /api/exercises/seed
+// @desc    Seed exercises in bulk
+// @access  Private
+router.post(
+    '/seed',
+    protect,
+    [
+        body().custom((value, { req }) => {
+            const payload = Array.isArray(req.body) ? req.body : req.body.exercises;
+            if (!Array.isArray(payload) || payload.length === 0) {
+                throw new Error('Exercises array is required');
+            }
+            return true;
+        }),
+    ],
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                errors: errors.array(),
+            });
+        }
+        return seedExercises(req, res, next);
+    }
+);
+
+
+
+
 // @route PUT /api/exercise/:id
 // @desc Update exercise
 // @ access Private
