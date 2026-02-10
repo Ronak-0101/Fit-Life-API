@@ -108,4 +108,44 @@ workoutSchema.pre('save', function (next) {
     next();
 });
 
+// This ensures exercise names matches the referenced exercise
+workoutSchema.pre('save', async function (next) {
+    // Only validate if exercises array exists and has items
+    if(this.exercises && this.exercises.length > 0) {
+        try {
+            // Import Exercise model (circular dependency safe)
+            const Exercise = mongoose.model('Exercise');
+
+            // Process each exercise in the workout
+            for (const exerciseItem of this.exercises) {
+                // Skip if no exerciseId
+                if(!exerciseItem.exerciseId) continue;
+
+                // Fetch the exercise from database
+                const exerciseDoc = await Exercise.findById(exerciseItem.exerciseId);
+                
+                if (!exerciseDoc) {
+                    // If exercise doesn't exist, throw error
+                    const error = new Error(`Exercise with ID ${exerciseItem.exerciseId} not found`);
+                    error.statusCode = 400;
+                    throw error;
+                }
+                // Update the name to match the database
+                // This ensures consistency even if client sends wrong name
+                exerciseItem.name = exerciseDoc.name;
+                
+                // Optional: You could also copy other exercise properties
+                // exerciseItem.muscleGroup = exerciseDoc.muscleGroup;
+                // exerciseItem.equipment = exerciseDoc.equipment;
+            }
+            next();
+        } catch (error) {
+            next(error);
+        }
+    }else {
+        next();
+    }
+})
+
+
 module.exports = mongoose.model('Workout', workoutSchema);

@@ -27,11 +27,11 @@ const exerciseSchema = new mongoose.Schema({
     equipment: {
         type: [String],
         enum: [
-            'barbell', 'dumbbell', 'kettlebell', 'machine',
+            'barbell', 'dumbbell','weight-plates',  'kettlebell', 'machine', 'bench', 
             'cable', 'bodyweight', 'resistance-bands',
             'stability-ball', 'medicine-ball', 'none',
         ],
-        alias: 'equipment'
+        // alias: 'equipment'  
     },
     difficulty: {
         type: String,

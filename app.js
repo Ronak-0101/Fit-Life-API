@@ -10,7 +10,8 @@ applyMiddlewares(app);
 // Routes
 app.get('/health', (req, res) => {
     res.status(200).json({
-        status: 'healthy',
+        success: true,
+        status: 'OK',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
     })
