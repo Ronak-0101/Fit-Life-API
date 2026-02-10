@@ -34,7 +34,7 @@ const foodItemSchema = new mongoose.Schema({
         min: 0
     },
     fiber: Number,
-    suger: Number,
+    sugar: Number,
 });
 
 const mealSchema = new mongoose.Schema({

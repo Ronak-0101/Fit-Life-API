@@ -18,7 +18,7 @@ const router = express.Router();
 router.post(
     '/',
     protect,
-    [body('data').optional().isISO8601(), body('weight').optional().isFloat({min: 0})],
+    [body('date').optional().isISO8601(), body('weight').optional().isFloat({min: 0})],
     async (req, res, next ) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {

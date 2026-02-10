@@ -7,8 +7,15 @@ const applyMiddleware = (app) => {
     // Security middleware
     app.use(helmet());
     app.use(cors({
-        origin: ['http://localhost:3000', 'http://localhost:8081'], // Flutter web & mobile
+        origin: [
+            'http://localhost:3000', 
+            'http://localhost:8081',
+            'http://localhost:5555', // Flutter web default
+            'exp://192.168.x.x:8081' // Expo go
+        ], // Flutter web & mobile
         credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
     }));
 
     // Rate Limiting

@@ -1,6 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const { protect } = require('../middleware/auth');
+const Exercise = require('../models/Exercise');
 const {
     getExercises,
     getExerciseById,
@@ -16,6 +17,17 @@ const router = express.Router();
 // @access  Public
 router.get('/', getExercises);
 
+router.get('/muscle/:group', async (req, res) => {
+    try {
+        const exercises = await Exercise.find({
+            muscleGroup: req.params.group
+        });
+        res.json({ success: true, exercises });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // @route   GET /api/exercises/:id
 // @desc    Get exercise by ID
 // @access  Public
@@ -27,8 +39,8 @@ router.get('/:id', getExerciseById);
 router.post('/', 
     protect, [
         body('name').trim().notEmpty(),
-        body('difficulty').optional().isIn(['beginner', 'intermediate', 'advance']),
-        body('type').optional().isIn(['strength', 'cardio', 'flexibility', 'balanced']),
+        body('difficulty').optional().isIn(['beginner', 'intermediate', 'advanced']),
+        body('type').optional().isIn(['strength', 'cardio', 'flexibility', 'balance']),
     ],
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -41,50 +53,6 @@ router.post('/',
         return createExercise(req, res, next);
     }
 );
-
-
-// @route   POST /api/exercises/seed
-// @desc    Seed exercises in bulk
-// @access  Private
-router.post(
-    '/seed',
-    protect,
-    [
-        body().custom((value, { req }) => {
-            const payload = Array.isArray(req.body) ? req.body : req.body.exercises;
-            if (!Array.isArray(payload) || payload.length === 0) {
-                throw new Error('Exercises array is required');
-            }
-            return true;
-        }),
-    ],
-    async (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                errors: errors.array(),
-            });
-        }
-        return seedExercises(req, res, next);
-    }
-);
-
-
-router.get('/muscle/:group', async (req, res) => {
-    try {
-        const exercises = await Exercise.find({ 
-            muscleGroup: req.params.group 
-        });
-        res.json({ success: true, exercises });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error' });
-    }
-});
-
-
-
-
 
 
 // @route PUT /api/exercise/:id

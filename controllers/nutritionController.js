@@ -39,7 +39,7 @@ const getNutritionLogById = async (req, res) => {
             userId: req.user._id,
         });
         if (!nutrition) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Nutrition Log not found',
             });
@@ -59,7 +59,7 @@ const getNutritionLogById = async (req, res) => {
 
 const updateNutritionLog = async (req, res) => {
     try {
-        const nutrition = await Nutrition.findByIdAndUpdate({
+        const nutrition = await Nutrition.findOneAndUpdate({
             _id: req.params.id,
             userId: req.user._id,
         },
@@ -87,7 +87,7 @@ const updateNutritionLog = async (req, res) => {
 
 const deleteNutritionLog = async (req, res) => {
     try {
-        const nutrition = await Nutrition.findByIdAndDelete({
+        const nutrition = await Nutrition.findOneAndDelete({
             _id: req.params.id,
             userId: req.user._id,
         });

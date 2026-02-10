@@ -94,7 +94,7 @@ const deleteExercise = async (req, res) => {
         });
     } catch (error) {
         console.error('Delete Exercise error : ', error);
-        res.Status(500).json({
+        res.status(500).json({
             success: false,
             message: 'Server error',
         });

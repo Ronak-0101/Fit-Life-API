@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const Exercise = require('../src/models/Exercise');
+const Exercise = require('../models/Exercise');
 
 const exercises = [
   {
