@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Email is required"],
         unique: true,
-        indec: true,
+        index: true,
         lowercase: true,
         trim: true,
         match: [/^\S+@\S+\.\S+$/, "Enter valid Email"]
@@ -61,6 +61,11 @@ const userSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
     }
 }, { timestamps: true },
 )

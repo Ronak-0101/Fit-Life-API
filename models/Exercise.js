@@ -9,6 +9,13 @@ const exerciseSchema = new mongoose.Schema({
     },
     description: String,
     instructions: [String],
+    bodyPart: {
+        type: String,
+        enum: [
+            'chest', 'back', 'shoulders', 'arms', 'legs', 'core', 'full-body',
+        ],
+        required: true,
+    },
     muscleGroup: {
         type: [String],
         enum: [
@@ -17,7 +24,7 @@ const exerciseSchema = new mongoose.Schema({
             'abs', 'full-body', 'cardio', 'flexibility',
         ]
     },
-    equipement: {
+    equipment: {
         type: [String],
         enum: [
             'barbell', 'dumbbell', 'kettlebell', 'machine',
@@ -42,6 +49,11 @@ const exerciseSchema = new mongoose.Schema({
     isPopular: {
         type: Boolean,
         default: false
+    },
+    isGlobal: {
+        type: Boolean,
+        default: true,
+        index: true,
     },
     createdBy: {
         type: String,
