@@ -28,7 +28,7 @@ router.post('/',
     protect, [
         body('name').trim().notEmpty(),
         body('difficulty').optional().isIn(['beginner', 'intermediate', 'advance']),
-        body('type').optional().isIn(['strength', 'cardio', 'flexibility', 'balance']),
+        body('type').optional().isIn(['strength', 'cardio', 'flexibility', 'balanced']),
     ],
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -69,6 +69,20 @@ router.post(
         return seedExercises(req, res, next);
     }
 );
+
+
+router.get('/muscle/:group', async (req, res) => {
+    try {
+        const exercises = await Exercise.find({ 
+            muscleGroup: req.params.group 
+        });
+        res.json({ success: true, exercises });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+
 
 
 

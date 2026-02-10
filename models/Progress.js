@@ -34,7 +34,7 @@ const progressSchema = new mongoose.Schema({
     notes:  String,
     createdAt: {
         type: Date,
-        dafault: Date.now,
+        default: Date.now,
     },
 });
 

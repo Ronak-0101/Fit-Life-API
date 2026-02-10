@@ -39,7 +39,7 @@ const getNutritionLogById = async (req, res) => {
             userId: req.user._id,
         });
         if (!nutrition) {
-            res.staus(404).json({
+            res.status(404).json({
                 success: false,
                 message: 'Nutrition Log not found',
             });

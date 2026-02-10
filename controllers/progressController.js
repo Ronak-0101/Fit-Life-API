@@ -1,5 +1,5 @@
 const Progress = require('../models/Progress');
-const { findOneAndUpdate } = require('../models/user');
+// const { findOneAndUpdate } = require('../models/user');
 
 const createProgressEntry = async (req, res) => {
     try {
