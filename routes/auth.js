@@ -5,7 +5,7 @@ const User = require('../models/user');
 const { generateToken } = require('../middleware/auth');
 
 router.get('/test', (req, res) => {
-  res.send('Auth route working');
+    res.send('Auth route working');
 });
 
 // @route   POST /api/auth/register
@@ -13,7 +13,8 @@ router.get('/test', (req, res) => {
 // @access  Public
 router.post('/register', [
     body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 8 }),
+    body('password').isLength({ min: 6 })
+        .withMessage('Password must be at least 8 characters long'),
     body('name').not().isEmail().trim()
 ], async (req, res) => {
     //Validate input
