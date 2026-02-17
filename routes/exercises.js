@@ -28,6 +28,21 @@ router.get('/muscle/:group', async (req, res) => {
     }
 });
 
+
+// @route   GET api/exercise/bodyparts/:part
+// @desc    Get exercise podypart
+// @access  Public
+router.get('/bodyparts/:part', async (req, res) => {
+    try {
+        const exercises = await Exercise.find({
+            bodyPart: req.params.part
+        });
+        res.json({ success: true, exercises });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // @route   GET /api/exercises/:id
 // @desc    Get exercise by ID
 // @access  Public
