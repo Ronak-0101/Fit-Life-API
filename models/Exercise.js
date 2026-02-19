@@ -12,7 +12,7 @@ const exerciseSchema = new mongoose.Schema({
     bodyPart: {
         type: String,
         enum: [
-            'chest', 'back', 'shoulders', 'biceps','triceps', 'legs', 'core', 'full-body',
+            'chestt', 'back', 'shoulders', 'biceps','triceps', 'legs', 'core', 'full-body',
         ],
         required: true,
     },
