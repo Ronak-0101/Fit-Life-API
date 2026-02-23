@@ -106,14 +106,45 @@ const updateExerciseByBodyPartAndId = async (req, res) => {
     try{
         const {part, id} = req.params;
 
-        const exercise = await Exercise.findOneAndUpdate(
-            {_id: id, bodyPart: part},
-            req.body,
-            {
-                new: true,
-                runValidators:true,
-            }
+        //Check if using mongodb operators
+        const updateData = req.body;
+        const useOperators = Object.keys(updateData).some(key => 
+            key.startsWith('$') // Like $push, $set, $addToSet
         );
+
+        let exercise;
+        if(useOperators) {
+            // Use Operators directly
+            exercise = await Exercise.findOneAndUpdate(
+                {_id: id, bodyPart: part},
+                updateData,
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+        } else {
+            // Regular update (replace behaviour)
+            exercise = await Exercise.findOneAndUpdate(
+                {_id: id, bodyPart: part},
+                updateData,
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+        }
+
+
+
+        // const exercise = await Exercise.findOneAndUpdate(
+        //     {_id: id, bodyPart: part},
+        //     req.body,
+        //     {
+        //         new: true,
+        //         runValidators:true,
+        //     }
+        // );
 
         if(!exercise) {
             return res.status(404).json({
@@ -122,7 +153,7 @@ const updateExerciseByBodyPartAndId = async (req, res) => {
             });
         }
 
-        return req.json({
+        return res.json({
             success: true,
             exercise,
         });

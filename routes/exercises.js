@@ -8,7 +8,7 @@ const {
     createExercise,
     updateExercise,
     deleteExercise,
-    updateExercisesByBodyPart,
+    updateExerciseByBodyPart,
     updateExerciseByBodyPartAndId,
 } = require('../controllers/exercisesController');
 
@@ -48,7 +48,7 @@ router.get('/bodyparts/:part', async (req, res) => {
 // @route   PUT /api/exercises/bodyparts/:part
 // @desc    Bulk update exercises by bodypart
 // @access  Private
-router.put('/bodyparts/:part', protect, updateExercisesByBodyPart);
+router.put('/bodyparts/:part', protect, updateExerciseByBodyPart);
 
 // @route   PUT /api/exercises/bodyparts/:part/:id
 // @desc    Update one exercise by bodypart and exercise id
