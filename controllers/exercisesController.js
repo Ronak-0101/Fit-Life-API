@@ -164,7 +164,8 @@ module.exports = {
     createExercise,
     updateExercise,
     deleteExercise,
-
+    updateExerciseByBodyPart,
+    updateExerciseByBodyPartAndId,
 };
 
 
