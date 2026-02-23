@@ -14,7 +14,7 @@ const getExercises = async (req, res) => {
             message: 'Server error',
         });
     }
-}
+};
 
 const getExerciseById = async (req, res) => {
     try {
@@ -23,7 +23,7 @@ const getExerciseById = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: 'Exercise not found',
-            })
+            });
         }
         res.json({
             success: true,
@@ -61,23 +61,80 @@ const updateExercise = async (req, res) => {
             runValidators: true,
         });
         if (!exercise) {
-            res.status(401).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Exercise not found',
             });
         }
-        res.json({
+        return res.json({
             success: true,
             exercise,
         });
     } catch (error) {
         console.error('Update Exercise error : ', error);
-        res.status(500).json({
-            success: false, 
+        return res.status(500).json({
+            success: false,
             message: 'Server error',
         });
     }
 };
+
+const updateExerciseByBodyPart = async (req, res) => {
+    try {
+        const { part } = req.params;
+        const result = await Exercise.updateMany(
+            {bodyPart: part},
+            {$set:req.body},
+            {runValidators: true},
+        );
+
+        return res.json({
+            success : true,
+            matchedCount: result.matchedCount,
+            modifiedCount: result.modifiedCount,
+        });
+    } catch(error) {
+        console.error('Update exercises by bodypart error : ',error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error',
+        });
+    }
+};
+
+const updateExerciseByBodyPartAndId = async (req, res) => {
+    try{
+        const {part, id} = req.params;
+
+        const exercise = await Exercise.findOneAndUpdate(
+            {_id: id, bodyPart: part},
+            req.body,
+            {
+                new: true,
+                runValidators:true,
+            }
+        );
+
+        if(!exercise) {
+            return res.status(404).json({
+                success: false,
+                message: 'Exercise not found for the given body part and id',
+            });
+        }
+
+        return req.json({
+            success: true,
+            exercise,
+        });
+    } catch(error) {
+        console.error('Update exercise by bodyPart and id error : ', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error',
+        });
+    }
+};
+
 
 const deleteExercise = async (req, res) => {
     try {
@@ -88,13 +145,13 @@ const deleteExercise = async (req, res) => {
                 message: 'Exercise not found',
             });
         }
-        res.json({
+        return res.json({
             success: true,
             message: 'Exercise deleted successfully',
         });
     } catch (error) {
         console.error('Delete Exercise error : ', error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Server error',
         });
