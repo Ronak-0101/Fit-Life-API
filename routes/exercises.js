@@ -9,7 +9,7 @@ const {
     updateExercise,
     deleteExercise,
     updateExercisesByBodyPart,
-    updateExerciseByBodyPartAndId
+    updateExerciseByBodyPartAndId,
 } = require('../controllers/exercisesController');
 
 const router = express.Router();
