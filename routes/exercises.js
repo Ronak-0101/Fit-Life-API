@@ -8,6 +8,8 @@ const {
     createExercise,
     updateExercise,
     deleteExercise,
+    updateExercisesByBodyPart,
+    updateExerciseByBodyPartAndId
 } = require('../controllers/exercisesController');
 
 const router = express.Router();
@@ -20,7 +22,7 @@ router.get('/', getExercises);
 router.get('/muscle/:group', async (req, res) => {
     try {
         const exercises = await Exercise.find({
-            muscleGroup: req.params.group
+            muscleGroup: req.params.group,
         });
         res.json({ success: true, exercises });
     } catch (error) {
@@ -29,19 +31,30 @@ router.get('/muscle/:group', async (req, res) => {
 });
 
 
-// @route   GET api/exercise/bodyparts/:part
-// @desc    Get exercise podypart
+// @route   GET api/exercises/bodyparts/:part
+// @desc    Get exercise by podypart
 // @access  Public
 router.get('/bodyparts/:part', async (req, res) => {
     try {
         const exercises = await Exercise.find({
-            bodyPart: req.params.part
+            bodyPart: req.params.part,
         });
         res.json({ success: true, exercises });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
+
+// @route   PUT /api/exercises/bodyparts/:part
+// @desc    Bulk update exercises by bodypart
+// @access  Private
+router.put('/bodyparts/:part', protect, updateExercisesByBodyPart);
+
+// @route   PUT /api/exercises/bodyparts/:part/:id
+// @desc    Update one exercise by bodypart and exercise id
+// @access  Private
+router.put('/bodyparts/:part/:id', protect, updateExerciseByBodyPartAndId);
+
 
 // @route   GET /api/exercises/:id
 // @desc    Get exercise by ID
@@ -51,8 +64,10 @@ router.get('/:id', getExerciseById);
 // @route POST /api/exercises
 // desc Create exercise
 // @access Private
-router.post('/', 
-    protect, [
+router.post(
+    '/',
+    protect,
+    [
         body('name').trim().notEmpty(),
         body('difficulty').optional().isIn(['beginner', 'intermediate', 'advanced']),
         body('type').optional().isIn(['strength', 'cardio', 'flexibility', 'balance']),
