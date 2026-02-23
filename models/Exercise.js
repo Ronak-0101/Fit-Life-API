@@ -44,7 +44,7 @@ const exerciseSchema = new mongoose.Schema({
         default: 'strength'
     },
     videoUrl: String,
-    imageUrl: String,
+    imageUrl: [String],
     averageCaloriesBurned: Number, // Per hour
     isPopular: {
         type: Boolean,
