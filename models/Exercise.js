@@ -20,7 +20,7 @@ const exerciseSchema = new mongoose.Schema({
         type: [String],
         enum: [
             'chest', 'back', 'shoulders', 'biceps', 'triceps',
-            'quadriceps', 'hamstrings', 'glutes', 'calves',
+            'quadriceps','lower back', 'hamstrings', 'glutes', 'calves',
             'abs', 'full-body', 'cardio', 'flexibility',
         ]
     },
@@ -28,7 +28,7 @@ const exerciseSchema = new mongoose.Schema({
         type: [String],
         enum: [
             'barbell', 'dumbbell','weight-plates',  'kettlebell', 'machine', 'bench', 
-            'cable', 'bodyweight', 'resistance-bands',
+            'cable', 'bodyweight', 'resistance-bands','pull-up bar',
             'stability-ball', 'medicine-ball', 'none',
         ],
         // alias: 'equipment'  
@@ -45,6 +45,11 @@ const exerciseSchema = new mongoose.Schema({
     },
     videoUrl: String,
     imageUrl: [String],
+    imageData: [{
+        data: Buffer,
+        contentType: String,
+        filename: String,
+    }],
     averageCaloriesBurned: Number, // Per hour
     isPopular: {
         type: Boolean,
