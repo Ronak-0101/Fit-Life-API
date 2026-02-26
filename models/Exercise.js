@@ -19,7 +19,7 @@ const exerciseSchema = new mongoose.Schema({
     muscleGroup: {
         type: [String],
         enum: [
-            'chest', 'back', 'shoulders', 'biceps', 'triceps','lats',
+            'chest', 'back', 'shoulders', 'biceps', 'triceps','lats',"middle back",
             'quadriceps','lower back', 'hamstrings', 'glutes', 'calves',
             'abs', 'full-body', 'cardio', 'flexibility',
         ]
@@ -27,7 +27,7 @@ const exerciseSchema = new mongoose.Schema({
     equipment: {
         type: [String],
         enum: [
-            'barbell', 'dumbbell','weight-plates',  'kettlebell', 'machine', 'bench', 
+            'barbell', 'dumbbell','weight-plates',  'kettlebell', 'machine', 'bench',"curl bar",
             'cable', 'bodyweight', 'resistance-bands','pull-up bar',
             'stability-ball', 'medicine-ball', 'none',
         ],
