@@ -19,7 +19,7 @@ const exerciseSchema = new mongoose.Schema({
     muscleGroup: {
         type: [String],
         enum: [
-            'chest', 'back', 'shoulders', 'biceps', 'triceps',
+            'chest', 'back', 'shoulders', 'biceps', 'triceps','lats',
             'quadriceps','lower back', 'hamstrings', 'glutes', 'calves',
             'abs', 'full-body', 'cardio', 'flexibility',
         ]
