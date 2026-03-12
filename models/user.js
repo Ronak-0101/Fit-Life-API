@@ -66,7 +66,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user',
-    }
+    },
+    tokenVersion: {
+        type: Number,
+        default: 0,
+    },
 }, { timestamps: true },
 )
 

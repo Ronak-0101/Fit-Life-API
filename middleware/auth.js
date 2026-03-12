@@ -21,6 +21,14 @@ const protect = async (req, res, next) => {
                     message: 'User not found',
                 });
             }
+
+            if (decoded.tokenVersion !== req.user.tokenVersion) {
+                return res.status(401).json({
+                    success: false,
+                    message: 'Token has been invalidated',
+                });
+            }
+
             next();
         } catch (error) {
             console.error('Auth Error : ',error.message);
@@ -38,8 +46,8 @@ const protect = async (req, res, next) => {
     }
 };
 
-const generateToken = (id) => {
-    return jwt.sign({ id },process.env.JWT_SECRET, {
+const generateToken = (id, tokenVersion = 0) => {
+    return jwt.sign({ id, tokenVersion },process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE || '30d',
     });
 };

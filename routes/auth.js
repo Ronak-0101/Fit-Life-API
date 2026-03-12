@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
-const { generateToken } = require('../middleware/auth');
+const { protect, generateToken } = require('../middleware/auth');
 
 router.get('/test', (req, res) => {
     res.send('Auth route working');
@@ -46,7 +46,7 @@ router.post('/register', [
         });
 
         // Generate token
-        const token = generateToken(user._id);
+        const token = generateToken(user._id, user.tokenVersion);
 
         res.status(201).json({
             success: true,
@@ -72,6 +72,27 @@ router.post('/register', [
             success: false,
             message: 'Server error during registration',
         })
+    }
+});
+
+// @route   POST /api/auth/logout
+// @desc    Logout user and invalidate current token
+// @access  Private
+router.post('/logout', protect, async (req, res) => {
+    try {
+        req.user.tokenVersion += 1;
+        await req.user.save();
+
+        res.json({
+            success: true,
+            message: 'Logged out successfully',
+        });
+    } catch (error) {
+        console.error('Logout Error : ', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error during logout',
+        });
     }
 });
 
@@ -118,7 +139,7 @@ router.post('/login', [
         await user.save();
 
         // Generate token
-        const token = generateToken(user._id);
+        const token = generateToken(user._id, user.tokenVersion);
 
         res.json({
             success: true,
@@ -141,10 +162,10 @@ router.post('/login', [
     }
 });
 
-// @route   POST /api/auth/me
+// @route   GET /api/auth/me
 // @desc    get current user
 // @access  Private
-router.get('/me', require('../middleware/auth').protect, async (req, res) => {
+router.get('/me', protect, async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         res.json({
