@@ -31,7 +31,7 @@ const exerciseSchema = new mongoose.Schema({
             'cable', 'bodyweight', 'resistance-bands','pull-up bar',
             'stability-ball', 'medicine-ball', 'none',
         ],
-        // alias: 'equipment'  
+        // alias: 'equipment'       
     },
     difficulty: {
         type: String,
