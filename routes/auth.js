@@ -13,9 +13,9 @@ router.get('/test', (req, res) => {
 // @access  Public
 router.post('/register', [
     body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 6 })
+    body('password').isLength({ min: 8 })
         .withMessage('Password must be at least 8 characters long'),
-    body('name').not().isEmail().trim()
+    body('name').trim().notEmpty().withMessage('Name is required')
 ], async (req, res) => {
     //Validate input
     const errors = validationResult(req);
@@ -60,6 +60,14 @@ router.post('/register', [
         });
     } catch (error) {
         console.error('Registration Error : ', error);
+
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
         res.status(500).json({
             success: false,
             message: 'Server error during registration',
