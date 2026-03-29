@@ -9,6 +9,34 @@ const exerciseSchema = new mongoose.Schema({
     },
     description: String,
     instructions: [String],
+    prescription: {
+        sets: {
+            type: Number,
+            min: 1,
+        },
+        reps: {
+            type: String,
+            trim: true,
+        },
+        rest: {
+            type: String,
+            trim: true,
+        },
+    },
+    executionGuide: [{
+        phase: {
+            type: String,
+            trim: true,
+        },
+        title: {
+            type: String,
+            trim: true,
+        },
+        instruction: {
+            type: String,
+            trim: true,
+        },
+    }],
     bodyPart: {
         type: String,
         enum: [
