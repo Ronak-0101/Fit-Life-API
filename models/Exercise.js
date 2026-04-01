@@ -22,6 +22,10 @@ const exerciseSchema = new mongoose.Schema({
             type: String,
             trim: true,
         },
+        duration: {
+            type: Number,
+            trim: true,
+        },
     },
     executionGuide: [{
         phase: {
