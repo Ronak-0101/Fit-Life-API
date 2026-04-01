@@ -9,6 +9,10 @@ const exerciseSchema = new mongoose.Schema({
     },
     description: String,
     instructions: [String],
+    duration: {
+        type: Number,
+        min: 1,
+    },
     prescription: {
         sets: {
             type: Number,
@@ -22,10 +26,7 @@ const exerciseSchema = new mongoose.Schema({
             type: String,
             trim: true,
         },
-        duration: {
-            type: Number,
-            trim: true,
-        },
+
     },
     executionGuide: [{
         phase: {
@@ -44,35 +45,35 @@ const exerciseSchema = new mongoose.Schema({
     bodyPart: {
         type: String,
         enum: [
-            'chest', 'back', 'shoulders', 'biceps','triceps', 'legs', 'core', 'full-body',
+            'chest', 'back', 'shoulders', 'biceps', 'triceps', 'legs', 'core', 'full-body',
         ],
         required: true,
     },
     muscleGroup: {
         type: [String],
         enum: [
-            'chest', 'back', 'shoulders', 'biceps', 'triceps','lats',"middle back",
-            'quadriceps','lower back', 'hamstrings', 'glutes', 'calves',
+            'chest', 'back', 'shoulders', 'biceps', 'triceps', 'lats', "middle back",
+            'quadriceps', 'lower back', 'hamstrings', 'glutes', 'calves',
             'abs', 'full-body', 'cardio', 'flexibility',
         ]
     },
     equipment: {
         type: [String],
         enum: [
-            'barbell', 'dumbbell','weight-plates',  'kettlebell', 'machine', 'bench',"curl bar",
-            'cable', 'bodyweight', 'resistance-bands','pull-up bar',
+            'barbell', 'dumbbell', 'weight-plates', 'kettlebell', 'machine', 'bench', "curl bar",
+            'cable', 'bodyweight', 'resistance-bands', 'pull-up bar',
             'stability-ball', 'medicine-ball', 'none',
         ],
         // alias: 'equipment'       
     },
     difficulty: {
         type: String,
-        enum: ['beginner','intermediate','advanced'],
+        enum: ['beginner', 'intermediate', 'advanced'],
         default: 'intermediate'
     },
     type: {
         type: String,
-        enum: ['strength','cardio','flexibility','balance'],
+        enum: ['strength', 'cardio', 'flexibility', 'balance'],
         default: 'strength'
     },
     videoUrl: String,
