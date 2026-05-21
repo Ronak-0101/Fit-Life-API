@@ -1,9 +1,16 @@
 const express = require('express');
-const { body, param, validationResult } = require('express-validator');
+const { body, param, query, validationResult } = require('express-validator');
 const { protect } = require('../middleware/auth');
-const { getTemplates, createSplit, getSplits, addExerciseToDay } = require('../controllers/splitsController');
+const {
+    getSelectedExercisesForDay,
+    getAvailableExercisesForDay,
+    addExerciseToDay,
+    removeExerciseFromDay,
+} = require('../controllers/splitsController');
 
 const router = express.Router();
+
+const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 const handleValidation = (req, res, next) => {
     const errors = validationResult(req);
@@ -13,10 +20,51 @@ const handleValidation = (req, res, next) => {
     return next();
 };
 
-router.get('/templates', protect, getTemplates);
-router.get('/', protect, getSplits);
-router.post('/', protect, [body('name').trim().notEmpty(), body('type').optional().isIn(['template', 'manual']), body('weeklyPlan').optional().isArray()], handleValidation, createSplit);
+const validateDay = () => param('day').isIn(days);
 
-router.post('/:splitId/days/:day/exercises', protect, [param('splitId').isMongoId(), param('day').isIn(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']), body('exerciseId').isMongoId(), body('sets').optional().isInt({ min: 1, max: 20 }), body('reps').optional().isString()], handleValidation, addExerciseToDay);
+router.get(
+    '/days/:day/exercises',
+    protect,
+    [validateDay()],
+    handleValidation,
+    getSelectedExercisesForDay
+);
+
+router.get(
+    '/days/:day/available-exercises',
+    protect,
+    [
+        validateDay(),
+        query('search').optional().trim().isLength({ min: 1 }),
+        query('bodyPart').optional().trim().isLength({ min: 1 }),
+        query('muscleGroup').optional().trim().isLength({ min: 1 }),
+    ],
+    handleValidation,
+    getAvailableExercisesForDay
+);
+
+router.post(
+    '/days/:day/exercises',
+    protect,
+    [
+        validateDay(),
+        body('exerciseId').isMongoId(),
+        body('sets').optional().isInt({ min: 1, max: 20 }),
+        body('reps').optional().trim().isLength({ min: 1 }),
+    ],
+    handleValidation,
+    addExerciseToDay
+);
+
+router.delete(
+    '/days/:day/exercises/:exerciseId',
+    protect,
+    [
+        validateDay(),
+        param('exerciseId').isMongoId(),
+    ],
+    handleValidation,
+    removeExerciseFromDay
+);
 
 module.exports = router;
